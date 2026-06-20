@@ -12,6 +12,9 @@ The interesting part isn't the happy path — it's that **every site fought back
 different way**. This guide documents each obstacle and the exact fix, so you can
 reuse the patterns instead of rediscovering them.
 
+> 📦 Comes with a **runnable script** — see [Run it](#run-it-the-included-script).
+> ⚖️ Licensed [MIT](LICENSE).
+
 ---
 
 ## TL;DR — the result
@@ -238,15 +241,54 @@ These apply to almost any "scrape a price from a retail site" task:
 
 ---
 
-## How to run this yourself
+## Run it: the included script
+
+This repo ships a **runnable Playwright script** (`compare-prices.mjs`) that applies
+every fix above and prints the cheapest store.
+
+```bash
+git clone https://github.com/nirmalmedicare/price-comparison-browser-agent-guide.git
+cd price-comparison-browser-agent-guide
+
+npm install                      # installs playwright
+npx playwright install chromium  # one-time browser download
+
+node compare-prices.mjs                 # defaults to "Sony WH-1000XM5"
+node compare-prices.mjs "Sony WH-1000XM5"
+HEADLESS=false node compare-prices.mjs  # watch the browser drive each site
+```
+
+Example output:
+
+```
+Comparing prices for: "Sony WH-1000XM5"
+------------------------------------------------
+Amazon.in            ₹27,627
+Reliance Digital     ₹31,990
+Vijay Sales          ₹27,990
+Tata CLiQ            ₹26999
+------------------------------------------------
+
+🥇 Cheapest: Tata CLiQ at ₹26999
+```
+
+Each store's quirk is handled in its own function in `compare-prices.mjs`
+(Reliance's `/products?q=` path, Vijay Sales' `/search-listing?q=`, Tata CLiQ's
+first-₹-is-the-price rule, Amazon's earbuds/accessory filter), so the script doubles
+as an executable version of this guide.
+
+> Retail markup changes often. If a store prints `not found`, re-check that site's
+> selector/URL section above — the **method** is the durable part, not any one selector.
+
+## Or run it as an agent (no script)
 
 1. Use **Claude Code** with the **Playwright MCP browser tools** enabled.
 2. Give it a plain-English prompt like the goal above.
 3. Let it **navigate, handle each site's quirk, extract prices, and compare** — keeping
    the browser visible so you can watch it adapt to each layout in real time.
 
-No hardcoded selectors or brittle scripts required — the agent discovers each site's
-quirks live. This guide just captures what those quirks turned out to be.
+No hardcoded selectors required — the agent discovers each site's quirks live. The
+script above is what those discoveries look like once captured.
 
 ---
 

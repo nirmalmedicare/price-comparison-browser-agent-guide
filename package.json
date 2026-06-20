@@ -1,0 +1,17 @@
+{
+  "name": "price-comparison-browser-agent-guide",
+  "version": "1.0.0",
+  "description": "Compare a product's price across Indian e-commerce sites using a Playwright browser script.",
+  "type": "module",
+  "bin": {
+    "compare-prices": "./compare-prices.mjs"
+  },
+  "scripts": {
+    "start": "node compare-prices.mjs",
+    "postinstall": "echo 'Next: npx playwright install chromium'"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "playwright": "^1.49.0"
+  }
+}
